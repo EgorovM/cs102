@@ -1,4 +1,12 @@
 def encrypt_vigenere(plaintext, keyword):
+    """
+    >>> encrypt_vigenere("PYTHON", "A")
+    'PYTHON'
+    >>> encrypt_vigenere("python", "a")
+    'python'
+    >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
+    'LXFOPVEFRNHR'
+    """
     ciphertext = ""
 
     keyword_ind = 0
@@ -19,7 +27,7 @@ def encrypt_vigenere(plaintext, keyword):
             ciphertext += letter
             continue
 
-        cryptLetterOrd += (ord(letter) - firstLetterOrd + shift) % 26
+        cryptLetterOrd += (ord(letter) - cryptLetterOrd + shift) % 26
         ciphertext += chr(cryptLetterOrd)
 
         keyword_ind = (keyword_ind + 1) % len(keyword)
@@ -28,6 +36,14 @@ def encrypt_vigenere(plaintext, keyword):
 
 
 def decrypt_vigenere(ciphertext, keyword):
+    """
+    >>> decrypt_vigenere("PYTHON", "A")
+    'PYTHON'
+    >>> decrypt_vigenere("python", "a")
+    'python'
+    >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
+    'ATTACKATDAWN'
+    """
     plaintext = ""
 
     keyword_ind = 0
@@ -48,7 +64,7 @@ def decrypt_vigenere(ciphertext, keyword):
             plaintext += cryptLetter
             continue
 
-        encryptLetterOrd -= (lastLetterOrd - ord(cryptLetter) + shift) % 26
+        encryptLetterOrd -= (encryptLetterOrd - ord(cryptLetter) + shift) % 26
         plaintext += chr(encryptLetterOrd)
 
         keyword_ind = (keyword_ind + 1) % len(keyword)
