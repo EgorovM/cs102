@@ -20,15 +20,15 @@ def encrypt_vigenere(plaintext, keyword):
         shift = ord(keyword[keyword_ind]) - minusOrd
 
         if letter >= "A" and letter <= "Z":
-            cryptLetterOrd = ord("A")
+            cryptLetter_ord = ord("A")
         elif letter >= "a" and letter <= "z":
-            cryptLetterOrd = ord("a")
+            cryptLetter_ord = ord("a")
         else:
             ciphertext += letter
             continue
 
-        cryptLetterOrd += (ord(letter) - cryptLetterOrd + shift) % 26
-        ciphertext += chr(cryptLetterOrd)
+        cryptLetter_ord += (ord(letter) - cryptLetter_ord + shift) % 26
+        ciphertext += chr(cryptLetter_ord)
 
         keyword_ind = (keyword_ind + 1) % len(keyword)
 
@@ -57,15 +57,15 @@ def decrypt_vigenere(ciphertext, keyword):
         shift = ord(keyword[keyword_ind]) - minusOrd
 
         if cryptLetter >= "A" and cryptLetter <= "Z":
-            encryptLetterOrd = ord("Z")
+            encryptLetter_ord = ord("Z")
         elif cryptLetter >= "a" and cryptLetter <= "z":
-            encryptLetterOrd = ord("z")
+            encryptLetter_ord = ord("z")
         else:
             plaintext += cryptLetter
             continue
 
-        encryptLetterOrd -= (encryptLetterOrd - ord(cryptLetter) + shift) % 26
-        plaintext += chr(encryptLetterOrd)
+        encryptLetter_ord -= (encryptLetter_ord - ord(cryptLetter) + shift) % 26
+        plaintext += chr(encryptLetter_ord)
 
         keyword_ind = (keyword_ind + 1) % len(keyword)
 
