@@ -1,34 +1,54 @@
-def encrypt_caesar(plaintext, shift):
+def encrypt_caesar(plaintext):
+    """
+    >>> encrypt_caesar("PYTHON")
+    'SBWKRQ'
+    >>> encrypt_caesar("python")
+    'sbwkrq'
+    >>> encrypt_caesar("Python3.6")
+    'Sbwkrq3.6'
+    >>> encrypt_caesar("")
+    ''
+    """
     ciphertext = ""
 
     for letter in plaintext:
         if letter >= "A" and letter <= "Z":
-            cryptLetterOrd = ord("A")
+            cryptletter_ord = ord("A")
         elif letter >= "a" and letter <= "z":
-            cryptLetterOrd = ord("a")
+            cryptletter_ord = ord("a")
         else:
             ciphertext += letter
             continue
 
-        cryptLetterOrd += (ord(letter) - firstLetterOrd + shift) % 26
-        ciphertext += chr(cryptLetterOrd)
+        cryptletter_ord += (ord(letter) - cryptletter_ord + 3) % 26
+        ciphertext += chr(cryptletter_ord)
 
     return ciphertext
 
 
-def decrypt_caesar(ciphertext, shift):
+def decrypt_caesar(ciphertext):
+    """
+    >>> decrypt_caesar("SBWKRQ")
+    'PYTHON'
+    >>> decrypt_caesar("sbwkrq")
+    'python'
+    >>> decrypt_caesar("Sbwkrq3.6")
+    'Python3.6'
+    >>> decrypt_caesar("")
+    ''
+    """
     plaintext = ""
 
     for cryptLetter in ciphertext:
         if cryptLetter >= "A" and cryptLetter <= "Z":
-            encryptLetterOrd = ord("Z")
+            encryptletter_ord = ord("Z")
         elif cryptLetter >= "a" and cryptLetter <= "z":
-            encryptLetterOrd = ord("z")
+            encryptletter_ord = ord("z")
         else:
             plaintext += cryptLetter
             continue
 
-        encryptLetterOrd -= (lastLetterOrd - ord(cryptLetter) + shift) % 26
-        plaintext += chr(encryptLetterOrd)
+        encryptletter_ord -= (encryptletter_ord - ord(cryptLetter) + 3) % 26
+        plaintext += chr(encryptletter_ord)
 
     return plaintext
