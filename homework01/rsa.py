@@ -2,6 +2,14 @@ import random
 
 
 def is_prime(n):
+    """
+    >>> is_prime(2)
+    True
+    >>> is_prime(11)
+    True
+    >>> is_prime(8)
+    False
+    """
     isPrime = True
 
     for factor in range(2, int(n ** 0.5) + 1):
@@ -13,6 +21,13 @@ def is_prime(n):
 
 
 def gcd(a, b):
+    """
+    Euclid's algorithm for determining the greatest common divisor.
+    >>> gcd(12, 15)
+    3
+    >>> gcd(3, 7)
+    1
+    """
     if b == 0:
         return a
     else:
@@ -20,21 +35,27 @@ def gcd(a, b):
 
 
 def multiplicative_inverse(e, phi):
+    """
+    Euclid's extended algorithm for finding the multiplicative
+    inverse of two numbers.
+    >>> multiplicative_inverse(7, 40)
+    -17
+    """
+
     history = []
 
-    while phi:
-        history.append([e, phi])
+    while e % phi != 0:
+        history.append(e // phi)
         e, phi = phi, e % phi
 
     x = 0
     y = 1
 
-    for i in reversed(range(1, len(history))):
+    for i in reversed(range(len(history))):
         prev_x = x
         x = y
-        y = prev_x - y * (history[i - 1][0] // history[i - 1][1])
+        y = prev_x - y * (history[i])
 
-        print(x, y, history[i], history[i - 1])
     return x
 
 
