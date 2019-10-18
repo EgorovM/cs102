@@ -1,5 +1,5 @@
 from typing import Tuple, List, Set, Optional
-
+import random
 
 def read_sudoku(filename: str) -> List[List[str]]:
     """ Прочитать Судоку из указанного файла """
@@ -185,9 +185,7 @@ def generate_sudoku(N: int) -> List[List[str]]:
     >>> check_solution(solution)
     True
     """
-    grid = read_sudoku('puzzle1.txt')
-    grid = solve(grid)
-
+    grid = solve([['.' for i in range(9)] for i in range(9)])
     possible_pos = [(i, j) for i in range(9) for j in range(9)]
 
     N = min(81, N)
