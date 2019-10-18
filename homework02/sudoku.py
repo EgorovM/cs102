@@ -1,6 +1,7 @@
 from typing import Tuple, List, Set, Optional
 import random
 
+
 def read_sudoku(filename: str) -> List[List[str]]:
     """ Прочитать Судоку из указанного файла """
     digits = [c for c in open(filename).read() if c in '123456789.']
