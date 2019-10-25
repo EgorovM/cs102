@@ -45,8 +45,12 @@ class GameOfLife:
             for col in range(3):
                 cur_row, cur_col = cell_row - 1 + row, cell_col - 1 + col
 
-                if (cur_row, cur_col) != cell and cur_row >= 0 and cur_col >= 0
-                and cur_col < self.cols and cur_row < self.rows:
+                if(
+                    (cur_row, cur_col) != cell and
+                    cur_row >= 0 and cur_col >= 0 and
+                    cur_col < self.cols and
+                    cur_row < self.rows
+                ):
                     neighbours.append((cell_row - 1 + row, cell_col - 1 + col))
 
         return neighbours
@@ -70,8 +74,10 @@ class GameOfLife:
                     if cell_list[cur_cell[0]][cur_cell[1]]:
                         neighbours_count += 1
 
-                if cell_list[row][col] == 1 and neighbours_count >= 2
-                and neighbours_count <= 3:
+                if(
+                    cell_list[row][col] == 1 and neighbours_count >= 2 and
+                    neighbours_count <= 3
+                ):
                     new_clist[row][col] = 1
                 elif cell_list[row][col] == 0 and neighbours_count == 3:
                     new_clist[row][col] = 1
@@ -192,7 +198,7 @@ class Console(UI):
 
 
 class GUI(UI):
-    def __init__(self, life, cell_size, speed):
+    def __init__(self, life, cell_size=10, speed=10):
         self.width = 640
         self.height = 480
         self.cell_size = cell_size
