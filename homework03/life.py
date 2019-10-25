@@ -2,11 +2,11 @@
 import pygame
 from pygame.locals import *
 import random
-from pprint import pprint as pp
 import abc
 import curses
 import time
 import copy
+
 
 class GameOfLife:
 
@@ -29,12 +29,9 @@ class GameOfLife:
         каждая клетка равновероятно может быть живой (1) или мертвой (0).
         :return: Список клеток, представленный в виде матрицы
         """
-        self.clist = [[random.randint(0,1) if randomize else 0 \
-                     for i in range(self.rows)]
-                     for i in range(self.cols)]
-        # PUT YOUR CODE HERE
+        self.clist = [[random.randint(0, 1) if randomize else 0 for i in range(
+                                        self.rows)] for i in range(self.cols)]
         return self.clist
-
 
     def get_neighbours(self, cell):
         """ Вернуть список соседей для указанной ячейки
@@ -48,8 +45,8 @@ class GameOfLife:
             for col in range(3):
                 cur_row, cur_col = cell_row - 1 + row, cell_col - 1 + col
 
-                if (cur_row, cur_col) != cell and cur_row >= 0 and cur_col >= 0 and\
-                    cur_col < self.cols and cur_row < self.rows:
+                if (cur_row, cur_col) != cell and cur_row >= 0 and cur_col >= 0
+                and cur_col < self.cols and cur_row < self.rows:
                     neighbours.append((cell_row - 1 + row, cell_col - 1 + col))
 
         return neighbours
@@ -73,7 +70,8 @@ class GameOfLife:
                     if cell_list[cur_cell[0]][cur_cell[1]]:
                         neighbours_count += 1
 
-                if cell_list[row][col] == 1 and neighbours_count >= 2 and neighbours_count <= 3:
+                if cell_list[row][col] == 1 and neighbours_count >= 2
+                and neighbours_count <= 3:
                     new_clist[row][col] = 1
                 elif cell_list[row][col] == 0 and neighbours_count == 3:
                     new_clist[row][col] = 1
@@ -86,7 +84,8 @@ class GameOfLife:
         Выполнить один шаг игры.
         """
         self.prev_generation = copy.deepcopy(self.curr_generation)
-        self.curr_generation = copy.deepcopy(self.update_cell_list(self.curr_generation))
+        self.curr_generation = copy.deepcopy(self.update_cell_list(
+                                                    self.curr_generation))
         self.generations += 1
 
     @property
@@ -113,7 +112,8 @@ class GameOfLife:
         grid_file = open(filename)
 
         grid = grid_file.readlines()
-        for i in range(len(grid)): grid[i] = list(map(int,list(grid[i][0:len(grid[i])-1])))
+        for i in range(len(grid)):
+            grid[i] = list(map(int, list(grid[i][0:len(grid[i])-1])))
         life = GameOfLife((len(grid), len(grid[i])))
         life.curr_generation = grid
 
@@ -127,12 +127,12 @@ class GameOfLife:
         """
         file = open(filename, 'w')
         for row in range(len(self.curr_generation)):
-            file.write("".join(map(str,self.curr_generation[row])) + '\n')
+            file.write("".join(map(str, self.curr_generation[row])) + '\n')
 
         file.close()
 
-class UI(abc.ABC):
 
+class UI(abc.ABC):
     def __init__(self, life: GameOfLife) -> None:
         self.life = life
 
@@ -140,18 +140,18 @@ class UI(abc.ABC):
     def run(self) -> None:
         pass
 
-class Console(UI):
 
+class Console(UI):
     def __init__(self, life: GameOfLife) -> None:
         super().__init__(life)
 
     def draw_borders(self, screen) -> None:
         """ Отобразить рамку """
         for x in range(life.cols+1):
-            screen.addstr(x, 0 ,'|')
+            screen.addstr(x, 0, '|')
             screen.addstr(x, life.rows+1, '|')
 
-        for y in range(1,life.rows+1):
+        for y in range(1, life.rows+1):
             screen.addstr(0, y, '-')
             screen.addstr(life.cols+1, y, '-')
 
@@ -190,9 +190,9 @@ class Console(UI):
 
         curses.endwin()
 
-class GUI(UI):
 
-    def __init__(self, life: GameOfLife, cell_size: int=10, speed: int=10) -> None:
+class GUI(UI):
+    def __init__(self, life, cell_size, speed):
         self.width = 640
         self.height = 480
         self.cell_size = cell_size
@@ -212,18 +212,36 @@ class GUI(UI):
 
     def draw_lines(self) -> None:
         for x in range(0, self.width, self.cell_width):
-            pygame.draw.line(self.screen, pygame.Color('black'),
-                    (x, 0), (x, self.height))
+            pygame.draw.line(
+                self.screen,
+                pygame.Color('black'),
+                (x, 0),
+                (x, self.height)
+            )
         for y in range(0, self.height, self.cell_height):
-            pygame.draw.line(self.screen, pygame.Color('black'),
-                    (0, y), (self.width, y))
+            pygame.draw.line(
+                self.screen,
+                pygame.Color('black'),
+                (0, y),
+                (self.width, y)
+            )
 
     def draw_grid(self) -> None:
         for line_ind in range(len(life.curr_generation)):
             for cell_ind in range(len(life.curr_generation[line_ind])):
-                pygame.draw.rect(self.screen, pygame.Color('green') if life.curr_generation[line_ind][cell_ind] else pygame.Color('white'),
-                    (cell_ind * self.cell_width, line_ind * self.cell_height,
-                    self.cell_width, self.cell_height))
+                pygame.draw.rect(
+                    self.screen,
+                    pygame.Color('green') if (
+                                life.curr_generation[line_ind][cell_ind]
+                                            )
+                    else pygame.Color('white'),
+                    (
+                        cell_ind * self.cell_width,
+                        line_ind * self.cell_height,
+                        self.cell_width,
+                        self.cell_height
+                    )
+                )
 
         self.draw_lines()
 
@@ -233,7 +251,6 @@ class GUI(UI):
         pygame.display.set_caption('Game of Life')
         self.screen.fill(pygame.Color('white'))
         myfont = pygame.font.SysFont('Comic Sans MS', 30)
-        generation = myfont.render('Поколение: ' + str(life.generations), False, (0, 0, 0))
         running = True
         self.draw_grid()
 
@@ -255,8 +272,9 @@ class GUI(UI):
                     row = pos[1] // self.cell_height
                     col = pos[0] // self.cell_width
 
-                    life.curr_generation[row][col] = 1 - life.curr_generation[row][col]
-
+                    life.curr_generation[row][col] = (
+                            1 - life.curr_generation[row][col]
+                    )
             if life.is_max_generations_exceeded:
                 running = False
 
@@ -264,13 +282,16 @@ class GUI(UI):
                 life.step()
 
             self.draw_grid()
-            generation = myfont.render('Поколение: ' + str(life.generations), False, (0, 0, 0))
-            self.screen.blit(generation,(0,0))
+            generation = myfont.render(
+                'Поколение: ' + str(life.generations),
+                False,
+                (0, 0, 0)
+            )
+            self.screen.blit(generation, (0, 0))
             pygame.display.flip()
             clock.tick(self.speed)
-
-
         pygame.quit()
+
 
 if __name__ == '__main__':
     randomize = True
@@ -295,7 +316,7 @@ if __name__ == '__main__':
         которую хотите сгенерировать:
     ''')
 
-    size = tuple(map(int,input("(row,col): ").split(',')))
+    size = tuple(map(int, input("(row,col): ").split(',')))
 
     print('''
         Хотите ограничить количество поколений?
@@ -313,7 +334,11 @@ if __name__ == '__main__':
 
         randomize = int(input("0/1: "))
 
-    life = GameOfLife(size, randomize, max_generations = max_generations)
+    life = GameOfLife(
+        size,
+        randomize=randomize,
+        max_generations=max_generations
+    )
 
     if mode:
         gui = GUI(life)
