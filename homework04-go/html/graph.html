@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Awesome go-echarts</title>
+    <script src="https://go-echarts.github.io/go-echarts-assets/assets/echarts.min.js"></script>
+    <link href="https://go-echarts.github.io/go-echarts-assets/assets/bulma.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="select" style="margin-right:10px; margin-top:10px; position:fixed; right:10px;">
+    <select onchange="window.location.href=this.options[this.selectedIndex].value">
+        <option value="http://127.0.0.1:8080/">Cообщество</option>
+    </select></div>
+
+    
+<div class="container">
+    <div class="item" id="TPlspLdKJkjp"
+         style="width:900px;height:500px;"></div>
+</div>
+<script type="text/javascript">
+    "use strict";
+    let myChart_TPlspLdKJkjp = echarts.init(document.getElementById('TPlspLdKJkjp'), "white");
+    let option_TPlspLdKJkjp = {
+        title: {"text":"Поиск сообществ",},
+        tooltip: {},
+        legend: {},
+        series: [
+        {"name":"graph","type":"graph","links":[{"source":"Айта","target":"Николай"},{"source":"Сайтал","target":"Мичил"},{"source":"Сайтал","target":"Артём"},{"source":"Мичил","target":"Айта"},{"source":"Мичил","target":"Сайтал"},{"source":"Мичил","target":"Артём"},{"source":"Мичил","target":"Владимир"},{"source":"Артём","target":"Айта"},{"source":"Артём","target":"Сайтал"},{"source":"Артём","target":"Мичил"},{"source":"Мстислав","target":"Николай"},{"source":"Владимир","target":"Мичил"}],"layout":"force","force":{"repulsion":8000},"data":[{"name":"Айта",},{"name":"Николай",},{"name":"Сайтал",},{"name":"Мичил",},{"name":"Артём",},{"name":"Мстислав",},{"name":"Владимир",},{"name":"Айта",},{"name":"Николай",},{"name":"Сайтал",},{"name":"Мичил",},{"name":"Артём",},{"name":"Мстислав",},{"name":"Владимир",},{"name":"Айта",},{"name":"Николай",},{"name":"Сайтал",},{"name":"Мичил",},{"name":"Артём",},{"name":"Мстислав",},{"name":"Владимир",}],"label":{"show":false},"emphasis":{"label":{"show":false},},"markLine":{"label":{"show":false}},"markPoint":{"label":{"show":false}},},
+        ],
+        color: ["#c23531","#2f4554","#61a0a8","#d48265","#91c7ae","#749f83","#ca8622","#bda29a","#6e7074","#546570","#c4ccd3"],
+    };
+    myChart_TPlspLdKJkjp.setOption(option_TPlspLdKJkjp);
+</script>
+
+    <br/>
+<style>
+    .container {display: flex;justify-content: center;align-items: center;}
+    .item {margin: auto;}
+</style>
+</body>
+</html>
