@@ -20,7 +20,7 @@ def age_predict(user_id: int) -> Optional[float]:
     friends = get_friends(user_id, 'bdate')
     year_in_seconds = 3.154e7
     friend_ages = []
-    
+
     for friend in friends['response']['items']:
         try:
             bdate = friend['bdate']
@@ -32,5 +32,4 @@ def age_predict(user_id: int) -> Optional[float]:
         except:
             pass
 
-    print(friend_ages)
     return median(friend_ages)

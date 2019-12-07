@@ -7,7 +7,6 @@ from gensim.corpora.dictionary import Dictionary
 
 def get_lda_model_byDomains(domains):
     """ Создать LDA модель из заданных ссылок
-
     :param domains: имена сообществ VK
     """
 

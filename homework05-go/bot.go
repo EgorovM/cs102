@@ -36,7 +36,7 @@ func SliceIndex(el string, slice []string) int {
 
 
 func setHttpConfig(){
-    proxyUrl, _ := url.Parse("http://198.98.58.178:8080")
+    proxyUrl, _ := url.Parse("http://34.90.113.143:3128")
     http.DefaultTransport = &http.Transport{
 		Proxy: http.ProxyURL(proxyUrl),
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
