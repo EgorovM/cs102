@@ -22,11 +22,11 @@ def normilize_texts(texts):
 
 
 train = [
-    ('I love this sandwich.', 'positive'),
-    ('This is an amazing place!', 'positive'),
-    ('I feel very good about these beers.', 'positive'),
-    ('This is my best work.', 'positive'),
-    ("What an awesome view", 'positive'),
+    ('I love this sandwich.', 'good'),
+    ('This is an amazing place!', 'good'),
+    ('I feel very good about these beers.', 'good'),
+    ('This is my best work.', 'good'),
+    ("What an awesome view", 'good'),
     ('I do not like this restaurant', 'never'),
     ('I am tired of this stuff.', 'never'),
     ("I can't deal with this", 'never'),
@@ -34,11 +34,11 @@ train = [
     ('My boss is horrible.', 'never')
 ]
 test = [
-    ('The beer was good.', 'positive'),
+    ('The beer was good.', 'good'),
     ('I do not enjoy my job', 'never'),
     ("I ain't feeling dandy today.", 'never'),
-    ("I feel amazing!", 'positive'),
-    ('Gary is a friend of mine.', 'positive'),
+    ("I feel amazing!", 'good'),
+    ('Gary is a friend of mine.', 'good'),
     ("I can't believe I'm doing this.", 'never')
 ]
 

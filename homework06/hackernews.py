@@ -63,10 +63,10 @@ def classify_news():
     labels = clf.predict([new.title for new in classified_news])
     labels = [(labels[i], new) for i, new in enumerate(classified_news)]
     labels.sort(key = lambda x: x[0])
-    print(labels)
     rows = [new[1] for new in labels]
+    labels = [label[0] for label in labels]
 
-    return template('news_template', rows=rows)
+    return template('news_template', rows=rows, labels=labels)
 
 if __name__ == "__main__":
     run(host="localhost", port=8080)
