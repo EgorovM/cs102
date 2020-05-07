@@ -4,7 +4,7 @@ python-decouple==3.1
 pytz==2020.1
 uWSGI==2.0.15
 django-widget-tweaks==1.4.2
-djangorestframework==3.8.2
+djangorestframework==3.9.1
 djangorestframework-jwt==1.11.0
 django-wysiwyg==0.8.0
 django-social-share
