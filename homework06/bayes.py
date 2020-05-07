@@ -7,7 +7,8 @@ class NaiveBayesClassifier:
         self.alpha = alpha
         self.morph = pymorphy2.MorphAnalyzer()
         self.dictionary = {}
-        self.labels_count = {"good" : 0, "maybe" : 0, "never" : 0}
+        self.labels = ["good", "maybe", "never"]
+        self.labels_count = dict.fromkeys(self.labels, 0)
         self.size = 0
         self.word_probability = {}
 
@@ -19,19 +20,17 @@ class NaiveBayesClassifier:
                 norm_form = self.morph.parse(word)[0].normal_form
 
                 if not norm_form in self.dictionary:
-                    self.dictionary[norm_form] = dict.fromkeys(self.labels_count.keys(), 0)
+                    self.dictionary[norm_form] = dict.fromkeys(self.labels, 0)
                     self.size += 1
 
                 if not norm_form in self.word_probability:
-                    self.word_probability[norm_form] = dict.fromkeys(self.labels_count.keys(), 0)
+                    self.word_probability[norm_form] = dict.fromkeys(self.labels, 0)
 
                 self.dictionary[norm_form][y[ind]] += 1
 
             self.labels_count[y[ind]] += 1
 
         for word in self.dictionary:
-
-
             for label in self.labels_count.keys():
                 nc  = sum([self.dictionary[w][label] for w in self.dictionary])
                 nic = self.dictionary[word][label]
@@ -42,7 +41,7 @@ class NaiveBayesClassifier:
         results = []
 
         for ind, text in enumerate(X):
-            probabilities = dict.fromkeys(self.labels_count.keys(), 0)
+            probabilities = dict.fromkeys(self.labels, 0)
 
             for label in probabilities:
                 prob = self.labels_count[label] / sum(self.labels_count.values())
@@ -51,7 +50,7 @@ class NaiveBayesClassifier:
             for word in text.split():
                 norm_form = self.morph.parse(word)[0].normal_form
 
-                for label in self.labels_count.keys():
+                for label in self.labels:
                     if norm_form in self.word_probability:
                         probabilities[label] += math.log(self.word_probability[norm_form][label])
 
@@ -70,4 +69,4 @@ class NaiveBayesClassifier:
 
         results = [1 if y_pred[i] == y_test[i] else 0 for i in range(len(y_test))]
 
-        return results.count(1) / len(results)
+        return sum(results) / len(results)

@@ -6,19 +6,18 @@ from scraputils import get_news
 from db import News, session
 from bayes import NaiveBayesClassifier
 
+s = session()
 
 @route("/news")
 def news_list():
-    s = session()
     rows = s.query(News).filter(News.label == None).all()
     return template('news_template', rows=rows)
 
 
 @route("/add_label/")
 def add_label():
-    s = session()
 
-    new_id = request.query['id']
+    new_id = request.query.get('id')
     label  = request.query['label']
 
     new = s.query(News).get(new_id)
@@ -30,14 +29,14 @@ def add_label():
 
 @route("/update")
 def update_news():
-    s = session()
+
     news_list = get_news('https://news.ycombinator.com/newest', n_pages=1)
     for new in news_list:
         q = s.query(News).filter(
                         News.title  == new["title"],
                         News.author == new["author"])
 
-        if not s.query(q.exists()):
+        if not s.query(q.exists()).scalar():
             news = News(title=new["title"],
                         author=new["author"],
                         url=new["url"],
@@ -51,7 +50,7 @@ def update_news():
 
 @route("/classify")
 def classify_news():
-    s = session()
+
     train_news = s.query(News).filter(News.label != None).all()
     X_train = [new.title for new in train_news]
     y_train = [new.label for new in train_news]

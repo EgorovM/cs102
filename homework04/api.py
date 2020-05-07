@@ -35,6 +35,7 @@ def get(url, params={}, timeout=5, max_retries=2, backoff_factor=0.3):
 
     return response.raise_for_status()
 
+
 def get_friends(user_id, fields=''):
     """ Вернуть данных о друзьях пользователя
 
@@ -51,6 +52,7 @@ def get_friends(user_id, fields=''):
             f"user_id={user_id}&" +
             f"fields={fields}&" +
             f"v={config.VK_CONFIG['version']}")
+
     response = requests.get(query)
 
     return response.json()

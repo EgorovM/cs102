@@ -18,8 +18,8 @@ def extract_news(parser):
 
         points = int(stat_divs[ind].find("span", {"class" : "score"}).text.split()[0])
         title = new_div.find("a", {"class": "storylink"}).text
-
         url = new_div.find("a", {"class": "storylink"})["href"]
+
         if len(url.split(".")) == 1:
             url = "https://news.ycombinator.com/" + url
 

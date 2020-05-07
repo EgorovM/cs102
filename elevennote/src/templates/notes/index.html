@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% if request.GET.msg %}
+<div class="row">
+  <div class="alert alert-primary" role="alert">
+    {{ request.GET.msg }}
+  </div>
+</div>
+{% endif %}
+<div class="row">
+  <div class="col-md-5">
+    {% if request.GET.filter_tag %}
+      <h2>Search by tag: {{request.GET.filter_tag}}</h2>
+    {% elif request.GET.filter_name %}
+      <h2>Search by name: {{request.GET.filter_name}}</h2>
+    {% endif %}
+
+  </div>
+  <div class="col-md-3 offset-md-4">
+    <form action="{% url 'notes:index' %}"class="form-inline" method="GET">
+      <input name="filter_name" class="form-control" type="search" placeholder="Search by name" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</div>
+
+{% if latest_note_list %}
+    <ul id="notes">
+    {% for note in latest_note_list %}
+
+      <li style="position: relative">
+        <p style='margin-top: 1rem'>
+        		<a href="{% url 'notes:update' note.pk %}">{{ note.title }}</a><br/>
+        		{{ note.body | safe }}
+        </p>
+
+        {% for tag in note.tags_list %}
+          {% if tag %}
+            <a class="tag-show" href="{% url 'notes:index' %}?filter_tag={{tag}}">{{tag|lower}}</a>
+          {% endif %}
+        {% endfor %}
+
+        <div style="position: absolute; right: 10px; top: 10px">
+          <a class="social-link" href="https://twitter.com/intent/tweet?text={{note.content}}{{request.META.HTTP_HOST}}{% url 'notes:detail' note.pk %}"><i class="fa fa-twitter" style="color: #00acee"></i></a>
+          <a class="social-link" href="mailto:?subject={{note.title}}&body={{note.content}}{{request.META.HTTP_HOST}}{% url 'notes:detail' note.pk %}"><i class="fa fa-send" style="color: grey"></i></a>
+          <a class="social-link" href="https://t.me/share/url?text={{note.content}}&url={{request.META.HTTP_HOST}}{% url 'notes:detail' note.pk %}"><i class="fa fa-telegram" style="color: #0088CC"></i></a>
+          <a class="social-link" href="https://wa.me/?text={{note.content}}{{request.META.HTTP_HOST}}{% url 'notes:detail' note.pk %}"><i class="fa fa-whatsapp"></i></a>
+        </div>
+
+      </li>
+
+
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No notes are available.</p>
+{% endif %}
+
+{% if is_paginated %}
+<div class="pagination">
+   <span class="step-links">
+       {% if page_obj.has_previous %}
+           <a href="?page={{ page_obj.previous_page_number }}&filter_tag={{request.GET.filter_tag}}&filter_name={{request.GET.filter_name}}">previous</a>
+       {% endif %}
+
+       <span class="current">
+           Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+       </span>
+
+       {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}&filter_tag={{request.GET.filter_tag}}&filter_name={{request.GET.filter_name}}">next</a>
+       {% endif %}
+  </span>
+</div>
+{% endif %}
+
+<a href="{% url 'notes:create' %}">Create a new note</a>
+
+{% endblock %}

@@ -11,7 +11,7 @@ import (
 
 
 const (
-	host   = "http://127.0.0.1:8080"
+	host   = "http://127.0.0.1:8000"
 	maxNum = 50
 )
 
@@ -59,9 +59,8 @@ func logTracing(next http.HandlerFunc) http.HandlerFunc {
 
 func main() {
     // TopicalModeling([]string{"itmoru","python"})
-    log.Println(GetUserName(364629895))
     http.HandleFunc("/", logTracing(graphHandler))
 
     log.Println("Run server at " + host)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8000", nil)
 }

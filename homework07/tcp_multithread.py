@@ -1,72 +1,57 @@
 import socket
-import select
+import threading
 import logging
 
 logging.basicConfig(
     level=logging.DEBUG,
-    format='[%(levelname)s] (%(processName)-10s) (%(threadName)-10s) %(message)s'
+    format='[%(levelname)s] (%(threadName)-10s) %(message)s'
 )
 
-read_waiters = {}
-write_waiters = {}
-connections = {}
 
-def accept_handler(serversocket: socket.socket) -> None:
-    clientsocket, (client_address, client_port) = serversocket.accept()
-    clientsocket.setblocking(False)
-    logging.debug(f"New client: {client_address}:{client_port}")
-    connections[clientsocket.fileno()] = (clientsocket, client_address, client_port)
-    read_waiters[clientsocket.fileno()] = (recv_handler, (clientsocket.fileno(),))
-    read_waiters[serversocket.fileno()] = (accept_handler, (serversocket,))
+def client_handler(sock: socket.socket, address: str, port: int) -> None:
+    while True:
+        try:
+            message = sock.recv(1024)
+            logging.debug(f"Recv: {message} from {address}:{port}")
+        except OSError:
+            break
 
-def recv_handler(fileno) -> None:
-    def terminate():
-        del connections[clientsocket.fileno()]
-        clientsocket.close()
-        logging.debug(f"Bye-Bye: {client_address}:{client_port}")
+        if len(message) == 0:
+            break
 
-    clientsocket, client_address, client_port = connections[fileno]
+        sent_message = message
+        while True:
+            sent_len = sock.send(sent_message)
+            if sent_len == len(sent_message):
+                break
+            sent_message = sent_message[sent_len:]
+        logging.debug(f"Send: {message} to {address}:{port}")
+    sock.close()
+    logging.debug(f"Bye-bye: {address}:{port}")
 
-    try:
-        message = clientsocket.recv(1024)
-    except OSError:
-        terminate()
-        return
 
-    if len(message) == 0:
-        terminate()
-        return
-
-    logging.debug(f"Recv: {message} from {client_address}:{client_port}")
-    write_waiters[fileno] = (send_handler, (fileno, message))
-
-def send_handler(fileno, message) -> None:
-    clientsocket, client_address, client_port = connections[fileno]
-    sent_len = clientsocket.send(message)
-    logging.debug("Send: {} to {}:{}".format(message[:sent_len], client_address, client_port))
-    if sent_len == len(message):
-        read_waiters[clientsocket.fileno()] = (recv_handler, (clientsocket.fileno(),))
-    else:
-        write_waiters[fileno] = (send_handler, (fileno, message[sent_len:]))
-
-def main(host: str = 'localhost', port: int = 9090) -> None:
+def main(host: str = 'localhost', port: int = 8090) -> None:
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serversocket.setblocking(False)
     serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
     serversocket.bind((host, port))
     serversocket.listen(128)
+    socket.setdefaulttimeout(10)
 
-    read_waiters[serversocket.fileno()] = (accept_handler, (serversocket,))
-    while True:
-        rlist, wlist, _ = select.select(read_waiters.keys(), write_waiters.keys(), [], 60)
+    print(f"Starting TCP Echo Server at {host}:{port}")
+    try:
+        while True:
+            clientsocket, (client_address, client_port) = serversocket.accept()
+            logging.debug(f"New client: {client_address}:{client_port}")
+            client_thread = threading.Thread(
+                target=client_handler,
+                args=(clientsocket, client_address, client_port))
+            client_thread.daemon = True
+            client_thread.start()
+    except KeyboardInterrupt:
+        print("Shutting down")
+    finally:
+        serversocket.close()
 
-        for r_fileno in rlist:
-            handler, args = read_waiters.pop(r_fileno)
-            handler(*args)
-
-        for w_fileno in wlist:
-            handler, args = write_waiters.pop(w_fileno)
-            handler(*args)
 
 if __name__ == "__main__":
     main()

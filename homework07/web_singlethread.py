@@ -1,11 +1,30 @@
-from locust import HttpLocust, TaskSet, task
+import socket
+import time
 
-class WebsiteTasks(TaskSet):
-    @task
-    def index(self):
-        self.client.get("/")
+def main(host: str = 'localhost', port: int = 8090) -> None:
+    serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
+    serversocket.bind((host, port))
+    serversocket.listen(128)
 
-class WebsiteUser(HttpLocust):
-    task_set = WebsiteTasks
-    min_wait = 5000
-    max_wait = 15000
+    print(f"Starting Web Server at {host}:{port}")
+    try:
+        while True:
+            clientsocket, clientaddr = serversocket.accept()
+            print("Connected to", clientaddr)
+            _ = clientsocket.recv(1024)
+            time.sleep(0.3)
+            clientsocket.sendall(
+                b"HTTP/1.1 200 OK\r\n"
+                b"Content-Type: text/html\r\n"
+                b"Content-Length: 71\r\n\r\n"
+                b"<html><head><title>Success</title></head><body>Index page</body></html>"
+            )
+            clientsocket.close()
+    except KeyboardInterrupt:
+        print("Shutting down")
+    finally:
+        serversocket.close()
+
+if __name__ == "__main__":
+    main()

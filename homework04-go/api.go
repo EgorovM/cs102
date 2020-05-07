@@ -7,10 +7,11 @@ import (
 func GetWallTexts(domain string, count int) ([] string){
     var texts []string
 
-    client, _ := vkapi.NewVKClientWithToken(access_token, nil)
-
-    wall, _ := client.WallGet(domain, count, nil)
-
+    client, err := vkapi.NewVKClientWithToken(access_token, nil)
+    routeError(err);
+    wall, err := client.WallGet(domain, count, nil)
+    routeError(err);
+    
     for i := 0; i < count; i++{
         texts = append(texts, wall.Posts[i].Text)
     }

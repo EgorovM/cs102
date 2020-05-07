@@ -19,12 +19,14 @@ func NetworkGet(userIds []int) ([][2]int){
         for j := 0; j < len(userIds); j++{
             find := Find(GetFriendsIds(userIds[i]), userIds[j])
 
+            log.Println(find)
             if find{
                 edges = append(edges, [2]int{i, j})
             }
         }
     }
 
+    log.Println(edges)
     return edges
 }
 
@@ -77,6 +79,7 @@ func graphHandler(w http.ResponseWriter, _ *http.Request) {
 	page.Add(
 		PlotGraph(),
 	)
+
 	f, err := os.Create(getRenderPath("graph.html"))
 	if err != nil {
 		log.Println(err)

@@ -10,7 +10,6 @@
         <table class="ui celled table">
             <thead>
                 <th>ID </th>
-                <th>Label </th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>#Likes</th>
@@ -23,7 +22,6 @@
                   %row = rows[i]
                   <tr>
                     <td>{{ row.id }}</td>
-                    <td>{{ labels[i] }}</td>
                     <td><a href="{{ row.url }}">{{ row.title }}</a></td>
                     <td>{{ row.author }}</td>
                     <td>{{ row.points }}</td>

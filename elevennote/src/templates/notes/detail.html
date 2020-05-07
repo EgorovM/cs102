@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{ note.title }}</h1>
+
+<p>{{ note.body|safe }}</p>
+
+<hr />
+<p>Поделиться:</p>
+<div>
+  <a class="social-link" href="https://twitter.com/intent/tweet?text={{note.content}}{{request.META.HTTP_HOST}}{% url 'notes:detail' note.pk %}"><i class="fa fa-twitter" style="color: #00acee"></i></a>
+  <a class="social-link" href="mailto:?subject={{note.title}}&body={{note.content}}{{request.META.HTTP_HOST}}{% url 'notes:detail' note.pk %}"><i class="fa fa-send" style="color: grey"></i></a>
+  <a class="social-link" href="https://t.me/share/url?text={{note.content}}&url={{request.META.HTTP_HOST}}{% url 'notes:detail' note.pk %}"><i class="fa fa-telegram" style="color: #0088CC"></i></a>
+  <a class="social-link" href="https://wa.me/?text={{note.content}}{{request.META.HTTP_HOST}}{% url 'notes:detail' note.pk %}"><i class="fa fa-whatsapp"></i></a>
+</div>
+
+{% endblock %}
