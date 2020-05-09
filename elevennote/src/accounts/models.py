@@ -26,12 +26,11 @@ class UserManager(BaseUserManager):
         user = self.model(email=self.normalize_email(email))
         user.set_password(password)
 
-        code = randomString(10)
-        user.code = code
+        user.code = randomString(10)
 
         send_mail(
             "Confirm account",
-            f"Hello!\nPlease, confirm your email:)\n127.0.0.1:8000/accounts/confirm/{code}",
+            f"Hello!\nPlease, confirm your email:)\n127.0.0.1:8000/accounts/confirm/{user.code}",
             "yklab.noreply@yandex.ru",
             recipient_list=[email],
             fail_silently=False,
@@ -51,10 +50,12 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(db_index=True, unique=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
     code = models.CharField(max_length=10, default="")
 
     USERNAME_FIELD = 'email'

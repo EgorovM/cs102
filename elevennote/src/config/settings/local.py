@@ -5,6 +5,7 @@ DEBUG = True
 INSTALLED_APPS += [
     'django.contrib.postgres'
 ]
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

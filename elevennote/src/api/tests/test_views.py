@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
-from notes.models import Note
+from accounts.models import User
+from notes.models    import Note
 
 
 User = get_user_model()
@@ -61,6 +62,7 @@ class NoteViewTest(TestCase):
                     "title": "New note title",
                     "body": "New note body"
         }, format="json")
+
         note = Note.objects.filter(owner=self.test_user1).last()
 
         self.assertEquals(
@@ -87,6 +89,18 @@ class NoteViewTest(TestCase):
         response = self.client.delete(reverse('api:note-detail', kwargs={"pk": pk}))
         self.assertEquals(Note.objects.filter(
             owner=self.test_user1).count(), self.n-1)
+
+    def test_api_can_append_tag(self):
+        self._authenticate()
+        pk = self.notes[0].id
+        tags = 'animal, cat, future'
+        response = self.client.put(reverse('api:note-detail', kwargs={"pk": pk}),
+                {
+                    "tags": tags,
+        }, format="json")
+
+        note = Note.objects.get(pk=pk)
+        self.assertEquals(note.tags, tags)
 
     def test_api_only_owner_can_get_note_detail(self):
         self._authenticate()

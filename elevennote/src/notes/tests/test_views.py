@@ -65,6 +65,7 @@ class IndexTests(TestCase):
 
         pub_date = notes[0].pub_date
         for note in notes[1:]:
+
             self.assertTrue(pub_date >= note.pub_date)
             pub_date = note.pub_date
 

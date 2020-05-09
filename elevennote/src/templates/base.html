@@ -11,6 +11,7 @@
     <script src="{% static "elevennote/jquery.js" %}"></script>
     <script src="{% static "elevennote/main.js" %}"></script>
     <script src="{% static "bootstraptag/bootstrap-tagsinput.js" %}"></script>
+    <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
     <link rel="stylesheet" media="all" href='{% static "font-awesome/css/font-awesome.css" %}'>
     <link rel="stylesheet" media="all" href='{% static "bootstraptag/bootstrap-tagsinput.css" %}'>
 
@@ -23,7 +24,7 @@
         {% if user.is_authenticated %}
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav mr-auto"></ul>
-          <span class="navbar-text" data-toggle="tooltip" data-placement="right" title="{% if user.is_active %} Confirmed! {% else %} Not confirmed{% endif %}">
+          <span class="navbar-text" data-toggle="tooltip" data-placement="right" title="{% if user.is_verified %} Confirmed! {% else %} Not confirmed{% endif %}">
             Signed in as {{ user.email }}.
             <a href="#">Profile</a> |
             <a href="{% url 'accounts:logout' %}">Logout</a>

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 from decouple import config
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 def root(*dirs):
